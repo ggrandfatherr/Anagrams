@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Clock.gd" type="Script" id=1]
+
+[node name="Clock" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+anchor_right = 1.0
+margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 4800.0
+
+[node name="MarginContainer" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Button" type="Button" parent="MarginContainer"]
+margin_left = 31.0
+margin_top = 230.0
+margin_right = 155.0
+margin_bottom = 250.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+text = "Give mE the time"
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer"]
+margin_left = 191.0
+margin_right = 270.0
+margin_bottom = 480.0
+text = "Running"
+
+[connection signal="pressed" from="MarginContainer/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="MarginContainer/CheckBox" to="." method="_on_CheckBox_pressed"]

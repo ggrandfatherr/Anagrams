@@ -1,0 +1,781 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://Anagrams/Panel.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Anagrams/EmptyButton.tscn" type="PackedScene" id=3]
+[ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://Resources/ErrorProducer.tscn" type="PackedScene" id=5]
+[ext_resource path="res://fonts_tff/nokiafc22.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://fonts/Nokia.tres" type="DynamicFont" id=7]
+
+[sub_resource type="GDScript" id=8]
+script/source = "extends Node2D
+
+const display_panel = preload(\"res://Resources/DispWords.tscn\")
+
+onready var enter_btn = $CanvasLayer/Control/Game/MajorContainer/EnterMargin/EnterButton
+onready var round_timer = $RoundTimer
+
+onready var final_score = $CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer/FinalScore/ScoreLabel
+onready var high_score = $CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer/FinalScore/HScoreLabel
+onready var time_label = $CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer/TimeContainer/TimeLabel
+onready var score_label = $CanvasLayer/Control/Game/MajorContainer/ScoreBoard/ScoreLabel
+onready var lower_grid = $CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons
+onready var upper_grid = $CanvasLayer/Control/Game/MajorContainer/UBContainer/UpperButtons
+
+onready var major_cont = $CanvasLayer/Control/Game
+onready var endgame_cont = $CanvasLayer/Control/EndGame
+onready var spelt_cont = $CanvasLayer/Control/EndGame/EndGameCont/SpeltMarg/SpeltContainer
+
+onready var control_tween = $ControlTween
+onready var tile_tween = $TileTween
+onready var return_tween = $ReturnTween
+
+onready var error_producer = $ErrorProducer
+
+var lower_buttons : Array = []
+var upper_buttons = []
+
+var score = 0
+var curr_box = 0
+#var moved_count.size() = 0
+
+var swapped = false
+var over = false
+var used_words = []
+var moved_count = 0
+
+var final_string = \"\"
+var new_string = \"\"
+
+
+func select_new_string():
+	new_string = EngDict.word_warehouse.keys()[randi() % EngDict.word_warehouse.size()]
+
+func rt_score(word_len):
+	var _score : int
+	match word_len:
+		3:
+			_score = 100
+		4:
+			_score = 400
+		5:
+			_score = 700
+		6:
+			_score = 1000
+		7: 
+			_score = 2000
+	return _score
+
+func split_string(string: String):
+	string = string.to_upper()
+	var word_len = string.length()
+	var string_array = []
+	while word_len > 0:
+		string_array.append(string.right(word_len -1))
+		string.erase(word_len -1,1)
+		word_len = string.length()
+
+	string_array.invert()
+	return string_array
+
+
+func _ready():
+	randomize()
+	select_new_string()
+	set_arrays_signals()
+	set_letters(new_string)
+	endgame_cont.visible = false
+
+
+func set_letters(n_string):
+	var _string = split_string(n_string)
+	_string.shuffle()
+	for i in lower_buttons.size():
+		lower_buttons[i].text = str(_string[i])
+		
+
+func _process(delta):
+	time_label.text = \"00:\"+str(int(round_timer.time_left)).pad_zeros(2)
+	watch_word()
+	if !over: 
+		enter_btn.disabled = !final_string.length() >= 3
+	score_label.text = str(score).pad_zeros(4)
+
+
+ 
+func _unhandled_input(event):
+	if event.is_action_released(\"ui_cancel\"):
+		for word in used_words:
+			var new_label = Label.new()
+			new_label.text = word.to_upper()
+			spelt_cont.add_child(new_label)
+			yield(get_tree().create_timer(0.2),\"timeout\")
+
+func set_arrays_signals():
+	var lb_arr = lower_grid.get_children()
+	
+	for i in lb_arr:
+		lower_buttons.append(i.get_child(0))
+	
+	for i in lower_buttons.size():
+		lower_buttons[i].connect(\"pressed\",self,\"move_to_id\",[lower_buttons[i]])
+		lower_buttons[i].id = i
+	
+	upper_buttons = upper_grid.get_children()
+	
+	for i in upper_buttons.size():
+		upper_buttons[i].id = i
+
+func watch_word():
+	var btn_list = rt_moved_btns()
+	var order : Dictionary = {}
+	var compiled_str = \"\"
+	
+	for i in range(btn_list.size()):
+		order[btn_list[i].x_pos] = btn_list[i]
+	
+	for i in range(btn_list.size()):
+		compiled_str += order[i+1].text
+
+	final_string = compiled_str
+
+func check_word():
+	if final_string.length() > 2:
+		if !final_string in used_words and (EngDict.small_dict.has(final_string.to_lower()) or EngDict.word_warehouse.has(final_string.to_lower())):
+			used_words.append(final_string)
+			score += rt_score(final_string.length())
+			print(score)
+			var message = \"+\" +str(rt_score(final_string.length()))
+			error_producer.create_error_message(message)
+		elif final_string in used_words:
+			var message = str(\"WORD: \",final_string.to_upper(),\" already used!!!\")
+			error_producer.create_error_message(message)
+		elif !EngDict.small_dict.has(final_string.to_lower()) or !EngDict.word_warehouse.has(final_string.to_lower()):
+			var message = str(\"Invalid Word: \",final_string.to_upper())
+			error_producer.create_error_message(message)
+
+func check_moved() -> int:
+	var _moved_btns = []
+	for btn in lower_buttons:
+		if btn.moved:
+			_moved_btns.append(btn)
+		else:
+			pass
+#	print(_moved_btns.size())
+	return _moved_btns.size()
+
+func rt_moved_btns():
+	var _moved_btns = []
+	for btn in lower_buttons:
+		if btn.moved:
+			_moved_btns.append(btn)
+		else:
+			pass
+
+	return _moved_btns
+
+func move_to_id(btn):
+	if !btn.moved:
+		var x_pos = check_moved()
+#		print(\"index: \",x_pos,\" - \",btn.id, \" = \", x_pos - btn.id,\" btn_id \",btn.id)
+		tile_tween.interpolate_property(btn,\"rect_position\",btn.rect_position,Vector2((x_pos - btn.id) * 48,-48),0.2)
+		tile_tween.start()
+		btn.rect_position = Vector2((x_pos - btn.id) * 48,-48)
+		btn.moved = true
+		btn.x_pos = check_moved()
+	elif btn.moved:
+		btn.moved = false
+		relocate_buttons(btn)
+		tile_tween.interpolate_property(btn,\"rect_position\",btn.rect_position,Vector2(0,0),0.2)
+		tile_tween.start()
+		btn.x_pos = 0
+		
+
+func drop_btns():
+	var btn_list = rt_moved_btns()
+	
+	for btn in btn_list:
+		move_to_id(btn)
+
+
+func relocate_buttons(_btn):
+	for btn in lower_buttons:
+		if !btn.moved:
+			continue
+		elif btn.moved and (btn.x_pos > _btn.x_pos):
+			var new_x = btn.x_pos - btn.id
+#			print(_btn,\" |\",btn,\" of \",btn.id, \" | \" ,btn.x_pos,\" > \", _btn.x_pos, btn.x_pos > _btn.x_pos,\" at: \",btn.rect_position, \" ||| \",new_x)
+			return_tween.interpolate_property(btn,\"rect_position\",null,Vector2((btn.x_pos - btn.id - 2) * 48,-48),0.1)
+			return_tween.start()
+			btn.rect_position = Vector2((btn.x_pos - btn.id - 2) * 48,-48)
+#			print(btn,\" at: \",btn.rect_position, \" to be \",Vector2((btn.x_pos - btn.id - 2) * 42,-48))
+			btn.x_pos -= 1
+			
+
+func disp_spelt_words():
+	used_words.sort()
+#	used_words.invert()
+	for word in used_words:
+		var _score = rt_score(word.length())
+		var new_panel = display_panel.instance()
+		new_panel.text = word.to_upper() + \" - \" + str(_score)
+		spelt_cont.add_child(new_panel)
+		yield(get_tree().create_timer(0.2),\"timeout\")
+	var new_panel = display_panel.instance()
+	new_panel.text = \"ORIGINAL WORD: \\\"\" + new_string.to_upper() + \"\\\"\"
+	spelt_cont.add_child(new_panel)
+
+func _on_EnterButton_pressed():
+	check_word()
+	drop_btns()
+
+func animate_boxes():
+	if !swapped:
+		control_tween.interpolate_property(major_cont,\"rect_position\",Vector2(0,0),Vector2(-1024,0),0.4)
+		control_tween.interpolate_property(endgame_cont,\"rect_position\",Vector2(-1024,0),Vector2(0,0),0.4)
+		endgame_cont.visible = true
+		major_cont.visible = false
+#		major_cont.rect_position = Vector2(-1024,0)
+#		endgame_cont.rect_position = Vector2(0,0)
+		control_tween.start()
+		swapped = true
+	else:
+		control_tween.interpolate_property(endgame_cont,\"rect_position\",Vector2(0,0),Vector2(-1024,0),0.4)
+		control_tween.interpolate_property(major_cont,\"rect_position\",Vector2(-1024,0),Vector2(0,0),0.4)
+		control_tween.start()
+		endgame_cont.visible = false
+		major_cont.visible = true
+		swapped = false
+
+func clear_display():
+	for i in spelt_cont.get_children():
+		i.queue_free()
+
+func set_highscore():
+	if score > EngDict.high_score:
+		EngDict.set_highscore(score)
+		high_score.visible = false
+		final_score.visible = true
+		final_score.text = \"!!!New High Score!!!: \" + str(score).pad_zeros(4)
+	else:
+		high_score.visible = true
+		final_score.text = \"Score: \" + str(score).pad_zeros(4)
+		high_score.text = \"HighScore: \" + str(EngDict.get_highscore()).pad_zeros(4)
+
+func _on_RoundTimer_timeout():
+	check_word()
+	set_highscore()
+	drop_btns()
+	over = true
+	enter_btn.disabled = true
+	animate_boxes()
+	disp_spelt_words()
+
+
+func _on_ShuffleButton_pressed():
+	drop_btns()
+	set_letters(new_string)
+
+
+func _on_ReplayButton_pressed():
+	over = false
+	drop_btns()
+	animate_boxes()
+	select_new_string()
+	set_letters(new_string)
+	clear_display()
+	round_timer.start(60)
+	score = 0
+	used_words = []
+	
+
+
+func _on_MenuButton_pressed():
+	get_tree().change_scene(\"res://MainMenu.tscn\")
+"
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.0862745, 0.0980392, 0.192157, 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.227451, 0.227451, 0.227451, 1 )
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+expand_margin_top = 3.0
+expand_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.172549, 0.164706, 0.164706, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.227451, 0.227451, 0.227451, 1 )
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 1.0
+expand_margin_right = 1.0
+expand_margin_top = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.227451, 0.227451, 0.227451, 1 )
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+expand_margin_top = 3.0
+expand_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.227451, 0.227451, 0.227451, 1 )
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+expand_margin_top = 3.0
+expand_margin_bottom = 3.0
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_char = 5
+font_data = ExtResource( 6 )
+
+[node name="Anagrams2" type="Node2D"]
+script = SubResource( 8 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Game" type="Control" parent="CanvasLayer/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/Game"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0.431373, 0.466667, 0.592157, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MajorContainer" type="VBoxContainer" parent="CanvasLayer/Control/Game"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Functionality" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer"]
+margin_right = 328.0
+margin_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/Functionality"]
+margin_right = 328.0
+margin_bottom = 40.0
+custom_styles/panel = SubResource( 7 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/Game/MajorContainer/Functionality"]
+margin_right = 328.0
+margin_bottom = 40.0
+alignment = 1
+
+[node name="ShuffleContainer" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer"]
+margin_right = 162.0
+margin_bottom = 40.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 3
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="ShuffleButton" type="Button" parent="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer/ShuffleContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 77.0
+margin_bottom = 30.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 2
+text = "SHUFFLE"
+
+[node name="TimeContainer" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer"]
+margin_left = 166.0
+margin_right = 328.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="TimeLabel" type="Label" parent="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer/TimeContainer"]
+margin_left = 10.0
+margin_top = 13.0
+margin_right = 152.0
+margin_bottom = 27.0
+align = 2
+valign = 1
+
+[node name="GameLabelCont" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer"]
+visible = false
+margin_top = 48.0
+margin_right = 1024.0
+margin_bottom = 102.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 20
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 20
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/Game/MajorContainer/GameLabelCont"]
+margin_left = 10.0
+margin_top = 20.0
+margin_right = 1014.0
+margin_bottom = 34.0
+text = "CIPHER "
+align = 1
+valign = 1
+
+[node name="ScoreBoard" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer"]
+margin_top = 48.0
+margin_right = 328.0
+margin_bottom = 348.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 60
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 40
+
+[node name="ScoreBG" type="NinePatchRect" parent="CanvasLayer/Control/Game/MajorContainer/ScoreBoard"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 64.0
+margin_top = 60.0
+margin_right = 264.0
+margin_bottom = 260.0
+rect_min_size = Vector2( 200, 200 )
+size_flags_horizontal = 6
+size_flags_vertical = 6
+texture = ExtResource( 4 )
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer/Control/Game/MajorContainer/ScoreBoard"]
+margin_left = 152.0
+margin_top = 153.0
+margin_right = 176.0
+margin_bottom = 167.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+text = "100"
+align = 1
+valign = 1
+
+[node name="EnterMargin" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer"]
+margin_left = 119.0
+margin_top = 356.0
+margin_right = 209.0
+margin_bottom = 397.0
+size_flags_horizontal = 6
+size_flags_vertical = 0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 10
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="EnterButton" type="Button" parent="CanvasLayer/Control/Game/MajorContainer/EnterMargin"]
+margin_left = 5.0
+margin_top = 10.0
+margin_right = 85.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 80, 0 )
+size_flags_horizontal = 6
+size_flags_vertical = 6
+custom_fonts/font = ExtResource( 7 )
+custom_styles/hover = SubResource( 6 )
+custom_styles/pressed = SubResource( 4 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 3 )
+text = "ENTER"
+
+[node name="UBContainer" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer"]
+margin_left = 17.0
+margin_top = 405.0
+margin_right = 310.0
+margin_bottom = 440.0
+size_flags_horizontal = 6
+
+[node name="UpperButtons" type="GridContainer" parent="CanvasLayer/Control/Game/MajorContainer/UBContainer"]
+margin_right = 293.0
+margin_bottom = 35.0
+custom_constants/hseparation = 8
+columns = 7
+
+[node name="Panel" parent="CanvasLayer/Control/Game/MajorContainer/UBContainer/UpperButtons" instance=ExtResource( 2 )]
+margin_right = 35.0
+margin_bottom = 35.0
+
+[node name="Panel2" parent="CanvasLayer/Control/Game/MajorContainer/UBContainer/UpperButtons" instance=ExtResource( 2 )]
+margin_left = 43.0
+margin_right = 78.0
+margin_bottom = 35.0
+
+[node name="Panel3" parent="CanvasLayer/Control/Game/MajorContainer/UBContainer/UpperButtons" instance=ExtResource( 2 )]
+margin_left = 86.0
+margin_right = 121.0
+margin_bottom = 35.0
+
+[node name="Panel4" parent="CanvasLayer/Control/Game/MajorContainer/UBContainer/UpperButtons" instance=ExtResource( 2 )]
+margin_left = 129.0
+margin_right = 164.0
+margin_bottom = 35.0
+
+[node name="Panel5" parent="CanvasLayer/Control/Game/MajorContainer/UBContainer/UpperButtons" instance=ExtResource( 2 )]
+margin_left = 172.0
+margin_right = 207.0
+margin_bottom = 35.0
+
+[node name="Panel6" parent="CanvasLayer/Control/Game/MajorContainer/UBContainer/UpperButtons" instance=ExtResource( 2 )]
+margin_left = 215.0
+margin_right = 250.0
+margin_bottom = 35.0
+
+[node name="Panel7" parent="CanvasLayer/Control/Game/MajorContainer/UBContainer/UpperButtons" instance=ExtResource( 2 )]
+margin_left = 258.0
+margin_right = 293.0
+margin_bottom = 35.0
+
+[node name="LBContainer" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer"]
+margin_top = 448.0
+margin_right = 328.0
+margin_bottom = 488.0
+size_flags_horizontal = 6
+
+[node name="LowerButtons" type="GridContainer" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer"]
+margin_right = 328.0
+margin_bottom = 40.0
+custom_constants/hseparation = 8
+columns = 7
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons/Panel" instance=ExtResource( 3 )]
+text = "D"
+
+[node name="Panel2" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons"]
+margin_left = 48.0
+margin_right = 88.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons/Panel2" instance=ExtResource( 3 )]
+
+[node name="Panel3" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons"]
+margin_left = 96.0
+margin_right = 136.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons/Panel3" instance=ExtResource( 3 )]
+text = "E"
+
+[node name="Panel4" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons"]
+margin_left = 144.0
+margin_right = 184.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons/Panel4" instance=ExtResource( 3 )]
+text = "D"
+
+[node name="Panel5" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons"]
+margin_left = 192.0
+margin_right = 232.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons/Panel5" instance=ExtResource( 3 )]
+text = "D"
+
+[node name="Panel6" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons"]
+margin_left = 240.0
+margin_right = 280.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons/Panel6" instance=ExtResource( 3 )]
+text = "D"
+
+[node name="Panel7" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons"]
+margin_left = 288.0
+margin_right = 328.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/LBContainer/LowerButtons/Panel7" instance=ExtResource( 3 )]
+text = "D"
+
+[node name="EndGame" type="Control" parent="CanvasLayer/Control"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -1024.0
+margin_right = -1024.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/EndGame"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0.00784314, 0, 0.0823529, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EndGameCont" type="VBoxContainer" parent="CanvasLayer/Control/EndGame"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 6
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreContainer" type="MarginContainer" parent="CanvasLayer/Control/EndGame/EndGameCont"]
+margin_right = 1024.0
+margin_bottom = 104.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="FinalScore" type="VBoxContainer" parent="CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1014.0
+margin_bottom = 94.0
+alignment = 1
+
+[node name="HScoreLabel" type="Label" parent="CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer/FinalScore"]
+margin_right = 1004.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 1 )
+text = "CURRENT SCORE: 17000"
+align = 1
+valign = 1
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer/FinalScore"]
+margin_top = 44.0
+margin_right = 1004.0
+margin_bottom = 84.0
+custom_fonts/font = SubResource( 1 )
+text = "CURRENT SCORE: 17000"
+align = 1
+valign = 1
+
+[node name="SpeltMarg" type="MarginContainer" parent="CanvasLayer/Control/EndGame/EndGameCont"]
+margin_top = 114.0
+margin_right = 1024.0
+margin_bottom = 414.0
+rect_min_size = Vector2( 0, 300 )
+
+[node name="SpeltContainer" type="VBoxContainer" parent="CanvasLayer/Control/EndGame/EndGameCont/SpeltMarg"]
+margin_top = 150.0
+margin_right = 1024.0
+margin_bottom = 150.0
+size_flags_vertical = 6
+alignment = 1
+
+[node name="Replay" type="HBoxContainer" parent="CanvasLayer/Control/EndGame/EndGameCont"]
+margin_left = 414.0
+margin_top = 424.0
+margin_right = 610.0
+margin_bottom = 600.0
+size_flags_horizontal = 6
+size_flags_vertical = 3
+custom_constants/separation = 15
+alignment = 1
+
+[node name="ReplayButton" type="Button" parent="CanvasLayer/Control/EndGame/EndGameCont/Replay"]
+margin_top = 78.0
+margin_right = 90.0
+margin_bottom = 98.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+text = "PLAY AGAIN"
+
+[node name="MenuButton" type="Button" parent="CanvasLayer/Control/EndGame/EndGameCont/Replay"]
+margin_left = 105.0
+margin_top = 78.0
+margin_right = 196.0
+margin_bottom = 98.0
+size_flags_vertical = 6
+text = "MAIN MENU"
+
+[node name="TileTween" type="Tween" parent="."]
+
+[node name="ReturnTween" type="Tween" parent="."]
+
+[node name="ErrorProducer" parent="." instance=ExtResource( 5 )]
+visible = false
+position = Vector2( 512, 320 )
+
+[node name="RoundTimer" type="Timer" parent="."]
+wait_time = 60.0
+one_shot = true
+autostart = true
+
+[node name="ControlTween" type="Tween" parent="."]
+
+[connection signal="pressed" from="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer/ShuffleContainer/ShuffleButton" to="." method="_on_ShuffleButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/Game/MajorContainer/EnterMargin/EnterButton" to="." method="_on_EnterButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/EndGame/EndGameCont/Replay/ReplayButton" to="." method="_on_ReplayButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/EndGame/EndGameCont/Replay/MenuButton" to="." method="_on_MenuButton_pressed"]
+[connection signal="timeout" from="RoundTimer" to="." method="_on_RoundTimer_timeout"]

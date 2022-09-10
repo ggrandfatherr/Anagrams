@@ -1,0 +1,1035 @@
+[gd_scene load_steps=51 format=2]
+
+[ext_resource path="res://Icons/tile_bg.png" type="Texture" id=1]
+[ext_resource path="res://fonts_tff/nokiafc22.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Icons/main_menu_hov.png" type="Texture" id=3]
+[ext_resource path="res://Icons/goback_hov.png" type="Texture" id=4]
+[ext_resource path="res://Icons/submitbtn_dis.png" type="Texture" id=5]
+[ext_resource path="res://Icons/main_menu.png" type="Texture" id=6]
+[ext_resource path="res://Icons/play_again.png" type="Texture" id=7]
+[ext_resource path="res://Icons/submitbtn_hov.png" type="Texture" id=8]
+[ext_resource path="res://Icons/start_small_hov.png" type="Texture" id=9]
+[ext_resource path="res://Icons/submitbtn.png" type="Texture" id=10]
+[ext_resource path="res://Icons/play_again_hov.png" type="Texture" id=11]
+[ext_resource path="res://Icons/empty_panel.png" type="Texture" id=12]
+[ext_resource path="res://Icons/start_small.png" type="Texture" id=13]
+[ext_resource path="res://Icons/goback.png" type="Texture" id=14]
+[ext_resource path="res://Anagrams/Panel.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Anagrams/EmptyButton.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Resources/ErrorProducer.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Anagrams7.gd" type="Script" id=18]
+[ext_resource path="res://Icons/shuffle_ico.png" type="Texture" id=19]
+[ext_resource path="res://Icons/shuffle_ico_hov.png" type="Texture" id=20]
+[ext_resource path="res://Icons/tile_bg_hv.png" type="Texture" id=21]
+[ext_resource path="res://Icons/tile_bg_pres.png" type="Texture" id=22]
+[ext_resource path="res://Icons/return.png" type="Texture" id=23]
+[ext_resource path="res://Icons/return_hov.png" type="Texture" id=24]
+[ext_resource path="res://assets/mouse_cursor.png" type="Texture" id=25]
+
+[sub_resource type="StyleBoxTexture" id=30]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 37, 37 )
+
+[sub_resource type="StyleBoxTexture" id=19]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 37, 37 )
+margin_left = 2.0
+margin_right = 3.0
+margin_top = 2.0
+margin_bottom = 1.0
+
+[sub_resource type="DynamicFont" id=8]
+size = 8
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=15]
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_char = 1
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=10]
+size = 8
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxTexture" id=29]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 37, 37 )
+
+[sub_resource type="StyleBoxTexture" id=13]
+texture = ExtResource( 12 )
+region_rect = Rect2( 0, 0, 35, 35 )
+
+[sub_resource type="StyleBoxTexture" id=24]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 37, 37 )
+margin_left = 2.0
+margin_right = 3.0
+margin_top = 2.0
+margin_bottom = 2.0
+
+[sub_resource type="DynamicFont" id=1]
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=28]
+size = 8
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=18]
+bg_color = Color( 0.431373, 0.466667, 0.592157, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing = false
+
+[sub_resource type="StyleBoxTexture" id=25]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 37, 37 )
+margin_left = 2.0
+margin_right = 3.0
+margin_top = 1.0
+margin_bottom = 2.0
+
+[sub_resource type="DynamicFont" id=17]
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=39]
+
+[sub_resource type="Theme" id=40]
+VScrollBar/styles/scroll = SubResource( 39 )
+VScrollBar/styles/scroll_focus = null
+
+[sub_resource type="DynamicFont" id=31]
+size = 8
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxTexture" id=32]
+texture = ExtResource( 21 )
+region_rect = Rect2( 0, 0, 37, 37 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id=33]
+texture = ExtResource( 22 )
+region_rect = Rect2( 0, 0, 37, 37 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id=34]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 37, 37 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id=35]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 37, 37 )
+margin_left = 6.0
+margin_right = 3.0
+
+[sub_resource type="DynamicFont" id=36]
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=22]
+bg_color = Color( 0.431373, 0.466667, 0.592157, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+anti_aliasing = false
+
+[sub_resource type="StyleBoxTexture" id=20]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 37, 37 )
+margin_left = 2.0
+margin_right = 3.0
+margin_top = 2.0
+margin_bottom = 2.0
+
+[sub_resource type="DynamicFont" id=21]
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=23]
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 2 )
+
+[node name="Anagrams7" type="Node2D"]
+script = ExtResource( 18 )
+__meta__ = {
+"_edit_horizontal_guides_": [  ]
+}
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.431373, 0.466667, 0.592157, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Game" type="Control" parent="CanvasLayer/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/Game"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0.431373, 0.466667, 0.592157, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MajorContainer" type="VBoxContainer" parent="CanvasLayer/Control/Game"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 8
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Functionality" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer"]
+margin_right = 270.0
+margin_bottom = 65.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 20
+custom_constants/margin_left = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/Game/MajorContainer/Functionality"]
+margin_left = 5.0
+margin_top = 20.0
+margin_right = 265.0
+margin_bottom = 65.0
+alignment = 1
+
+[node name="ExitCont" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer"]
+margin_right = 45.0
+margin_bottom = 45.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer/ExitCont"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 35, 35 )
+custom_styles/panel = SubResource( 30 )
+
+[node name="Undo" type="TextureButton" parent="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer/ExitCont/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+texture_normal = ExtResource( 14 )
+texture_hover = ExtResource( 4 )
+expand = true
+stretch_mode = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TimeContainer" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer"]
+margin_left = 49.0
+margin_right = 260.0
+margin_bottom = 45.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 3
+custom_constants/margin_right = 40
+custom_constants/margin_left = 40
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer/TimeContainer"]
+margin_left = 40.0
+margin_top = 15.0
+margin_right = 171.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 48, 14 )
+size_flags_vertical = 6
+custom_styles/panel = SubResource( 19 )
+
+[node name="TimeLabel" type="Label" parent="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer/TimeContainer/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+custom_colors/font_color = Color( 0.235294, 0.223529, 0.356863, 1 )
+custom_fonts/font = SubResource( 8 )
+text = "00:33"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreBoard" type="VBoxContainer" parent="CanvasLayer/Control/Game/MajorContainer"]
+margin_left = 99.0
+margin_top = 145.0
+margin_right = 170.0
+margin_bottom = 199.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="ScoreCont" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer/ScoreBoard"]
+margin_right = 71.0
+margin_bottom = 40.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer/Control/Game/MajorContainer/ScoreBoard/ScoreCont"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 61.0
+margin_bottom = 30.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+custom_fonts/font = SubResource( 15 )
+text = "3400"
+align = 1
+valign = 1
+
+[node name="WDCount" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer/ScoreBoard"]
+margin_top = 44.0
+margin_right = 71.0
+margin_bottom = 54.0
+
+[node name="WordCount" type="Label" parent="CanvasLayer/Control/Game/MajorContainer/ScoreBoard/WDCount"]
+margin_right = 71.0
+margin_bottom = 10.0
+custom_fonts/font = SubResource( 10 )
+text = "16 words."
+align = 1
+valign = 1
+
+[node name="ButtonSet" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer"]
+margin_left = 6.0
+margin_top = 297.0
+margin_right = 264.0
+margin_bottom = 462.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+custom_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet"]
+margin_right = 258.0
+margin_bottom = 135.0
+custom_constants/separation = 10
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer"]
+margin_right = 258.0
+margin_bottom = 55.0
+
+[node name="ShuffleContainer" type="MarginContainer" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/HBoxContainer"]
+margin_right = 55.0
+margin_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/HBoxContainer/ShuffleContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 45.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 35, 35 )
+custom_styles/panel = SubResource( 29 )
+
+[node name="ShuffleButton" type="TextureButton" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/HBoxContainer/ShuffleContainer/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+texture_normal = ExtResource( 19 )
+texture_hover = ExtResource( 20 )
+expand = true
+stretch_mode = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EnterButton" type="TextureButton" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/HBoxContainer"]
+margin_left = 104.0
+margin_top = 15.0
+margin_right = 212.0
+margin_bottom = 39.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+texture_normal = ExtResource( 10 )
+texture_hover = ExtResource( 8 )
+texture_disabled = ExtResource( 5 )
+stretch_mode = 3
+
+[node name="UpperButtons" type="GridContainer" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer"]
+margin_top = 65.0
+margin_right = 258.0
+margin_bottom = 95.0
+size_flags_horizontal = 6
+custom_constants/hseparation = 8
+columns = 7
+
+[node name="Panel" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/UpperButtons" instance=ExtResource( 15 )]
+margin_right = 30.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+
+[node name="Panel2" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/UpperButtons" instance=ExtResource( 15 )]
+margin_left = 38.0
+margin_right = 68.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+
+[node name="Panel3" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/UpperButtons" instance=ExtResource( 15 )]
+margin_left = 76.0
+margin_right = 106.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+
+[node name="Panel4" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/UpperButtons" instance=ExtResource( 15 )]
+margin_left = 114.0
+margin_right = 144.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+
+[node name="Panel5" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/UpperButtons" instance=ExtResource( 15 )]
+margin_left = 152.0
+margin_right = 182.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+
+[node name="Panel6" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/UpperButtons" instance=ExtResource( 15 )]
+margin_left = 190.0
+margin_right = 220.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+
+[node name="Panel7" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/UpperButtons" instance=ExtResource( 15 )]
+margin_left = 228.0
+margin_right = 258.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+
+[node name="LowerButtons" type="GridContainer" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer"]
+margin_top = 105.0
+margin_right = 258.0
+margin_bottom = 135.0
+size_flags_horizontal = 6
+custom_constants/hseparation = 8
+columns = 7
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons"]
+margin_right = 30.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+size_flags_horizontal = 2
+custom_styles/panel = SubResource( 13 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons/Panel" instance=ExtResource( 16 )]
+rect_min_size = Vector2( 30, 30 )
+text = "T"
+
+[node name="Panel2" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons"]
+margin_left = 38.0
+margin_right = 68.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+size_flags_horizontal = 2
+custom_styles/panel = SubResource( 13 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons/Panel2" instance=ExtResource( 16 )]
+text = "D"
+
+[node name="Panel3" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons"]
+margin_left = 76.0
+margin_right = 106.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+size_flags_horizontal = 2
+custom_styles/panel = SubResource( 13 )
+
+[node name="Button2" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons/Panel3" instance=ExtResource( 16 )]
+text = "E"
+
+[node name="Panel4" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons"]
+margin_left = 114.0
+margin_right = 144.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+size_flags_horizontal = 2
+custom_styles/panel = SubResource( 13 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons/Panel4" instance=ExtResource( 16 )]
+text = "R"
+
+[node name="Panel5" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons"]
+margin_left = 152.0
+margin_right = 182.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+size_flags_horizontal = 2
+custom_styles/panel = SubResource( 13 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons/Panel5" instance=ExtResource( 16 )]
+text = "T"
+
+[node name="Panel6" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons"]
+margin_left = 190.0
+margin_right = 220.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+size_flags_horizontal = 2
+custom_styles/panel = SubResource( 13 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons/Panel6" instance=ExtResource( 16 )]
+text = "S"
+
+[node name="Panel7" type="Panel" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons"]
+margin_left = 228.0
+margin_right = 258.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+size_flags_horizontal = 2
+custom_styles/panel = SubResource( 13 )
+
+[node name="Button" parent="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/LowerButtons/Panel7" instance=ExtResource( 16 )]
+text = "L"
+
+[node name="EndGame" type="Control" parent="CanvasLayer/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -270.0
+margin_right = -270.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/EndGame"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0.431373, 0.466667, 0.592157, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EndGameCont" type="VBoxContainer" parent="CanvasLayer/Control/EndGame"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreContainer" type="MarginContainer" parent="CanvasLayer/Control/EndGame/EndGameCont"]
+margin_right = 270.0
+margin_bottom = 100.0
+custom_constants/margin_right = 2
+custom_constants/margin_top = 7
+custom_constants/margin_left = 2
+custom_constants/margin_bottom = 3
+
+[node name="FinalScore" type="VBoxContainer" parent="CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 262.0
+margin_bottom = 97.0
+size_flags_horizontal = 6
+custom_constants/separation = 5
+alignment = 1
+
+[node name="HSPanel" type="Panel" parent="CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer/FinalScore"]
+margin_right = 255.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 255, 30 )
+custom_styles/panel = SubResource( 24 )
+
+[node name="HScoreLabel" type="Label" parent="CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer/FinalScore/HSPanel"]
+margin_top = 5.0
+margin_right = 250.0
+margin_bottom = 25.0
+custom_colors/font_color = Color( 0.235294, 0.223529, 0.356863, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "CURRENT SCORE: 17000"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SPanel" type="Panel" parent="CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer/FinalScore"]
+margin_top = 35.0
+margin_right = 255.0
+margin_bottom = 65.0
+rect_min_size = Vector2( 255, 30 )
+custom_styles/panel = SubResource( 24 )
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer/FinalScore/SPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0.235294, 0.223529, 0.356863, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "CURRENT SCORE: 17000"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AmountPane" type="Panel" parent="CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer/FinalScore"]
+margin_left = 77.0
+margin_top = 70.0
+margin_right = 177.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 100, 20 )
+size_flags_horizontal = 6
+custom_styles/panel = SubResource( 24 )
+
+[node name="WordAmnt" type="Label" parent="CanvasLayer/Control/EndGame/EndGameCont/ScoreContainer/FinalScore/AmountPane"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0.235294, 0.223529, 0.356863, 1 )
+custom_fonts/font = SubResource( 28 )
+text = "300 words"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpeltMarg" type="MarginContainer" parent="CanvasLayer/Control/EndGame/EndGameCont"]
+margin_top = 104.0
+margin_right = 270.0
+margin_bottom = 427.0
+rect_min_size = Vector2( 0, 300 )
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control/EndGame/EndGameCont/SpeltMarg"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 265.0
+margin_bottom = 318.0
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 18 )
+
+[node name="FullStack" type="VBoxContainer" parent="CanvasLayer/Control/EndGame/EndGameCont/SpeltMarg"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 265.0
+margin_bottom = 318.0
+size_flags_vertical = 3
+alignment = 1
+
+[node name="SpeltWord" type="MarginContainer" parent="CanvasLayer/Control/EndGame/EndGameCont/SpeltMarg/FullStack"]
+margin_left = 5.0
+margin_right = 255.0
+margin_bottom = 33.0
+size_flags_horizontal = 6
+custom_constants/margin_right = 10
+custom_constants/margin_top = 5
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 3
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control/EndGame/EndGameCont/SpeltMarg/FullStack/SpeltWord"]
+margin_left = 10.0
+margin_top = 5.0
+margin_right = 240.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 230, 25 )
+custom_styles/panel = SubResource( 25 )
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/EndGame/EndGameCont/SpeltMarg/FullStack/SpeltWord/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0.235294, 0.223529, 0.356863, 1 )
+custom_fonts/font = SubResource( 17 )
+text = "MMMM: \"MMMMMMM\""
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spelt" type="MarginContainer" parent="CanvasLayer/Control/EndGame/EndGameCont/SpeltMarg/FullStack"]
+margin_top = 37.0
+margin_right = 260.0
+margin_bottom = 313.0
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 3
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control/EndGame/EndGameCont/SpeltMarg/FullStack/Spelt"]
+margin_left = 5.0
+margin_top = 3.0
+margin_right = 255.0
+margin_bottom = 273.0
+rect_min_size = Vector2( 0, 250 )
+size_flags_vertical = 3
+theme = SubResource( 40 )
+scroll_horizontal_enabled = false
+
+[node name="SpeltContainer" type="GridContainer" parent="CanvasLayer/Control/EndGame/EndGameCont/SpeltMarg/FullStack/Spelt/ScrollContainer"]
+margin_left = 125.0
+margin_right = 125.0
+margin_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_clip_content = true
+size_flags_horizontal = 6
+size_flags_vertical = 3
+custom_constants/hseparation = 2
+columns = 2
+
+[node name="Holder" type="VBoxContainer" parent="CanvasLayer/Control/EndGame/EndGameCont"]
+margin_left = 48.0
+margin_top = 431.0
+margin_right = 221.0
+margin_bottom = 480.0
+size_flags_horizontal = 6
+size_flags_vertical = 4
+custom_constants/separation = 10
+alignment = 1
+
+[node name="ViewWordList" type="Button" parent="CanvasLayer/Control/EndGame/EndGameCont/Holder"]
+margin_left = 21.0
+margin_right = 152.0
+margin_bottom = 20.0
+size_flags_horizontal = 6
+custom_colors/font_color = Color( 0.235294, 0.223529, 0.356863, 1 )
+custom_fonts/font = SubResource( 31 )
+custom_styles/hover = SubResource( 32 )
+custom_styles/pressed = SubResource( 33 )
+custom_styles/normal = SubResource( 34 )
+text = "View Word Combinations"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/EndGame/EndGameCont/Holder"]
+margin_top = 30.0
+margin_right = 173.0
+margin_bottom = 49.0
+size_flags_horizontal = 6
+custom_constants/margin_bottom = 5
+
+[node name="Replay" type="HBoxContainer" parent="CanvasLayer/Control/EndGame/EndGameCont/Holder/MarginContainer"]
+margin_right = 173.0
+margin_bottom = 14.0
+size_flags_horizontal = 6
+custom_constants/separation = 15
+alignment = 1
+
+[node name="ReplayButton" type="TextureButton" parent="CanvasLayer/Control/EndGame/EndGameCont/Holder/MarginContainer/Replay"]
+margin_right = 80.0
+margin_bottom = 14.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+texture_normal = ExtResource( 7 )
+texture_hover = ExtResource( 11 )
+
+[node name="MenuButton" type="TextureButton" parent="CanvasLayer/Control/EndGame/EndGameCont/Holder/MarginContainer/Replay"]
+margin_left = 95.0
+margin_right = 173.0
+margin_bottom = 13.0
+size_flags_vertical = 6
+texture_normal = ExtResource( 6 )
+texture_hover = ExtResource( 3 )
+
+[node name="WordList" type="VBoxContainer" parent="CanvasLayer/Control/EndGame"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WLbl" type="MarginContainer" parent="CanvasLayer/Control/EndGame/WordList"]
+margin_left = 5.0
+margin_right = 265.0
+margin_bottom = 29.0
+size_flags_horizontal = 6
+custom_constants/margin_right = 10
+custom_constants/margin_top = 5
+custom_constants/margin_left = 10
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control/EndGame/WordList/WLbl"]
+margin_left = 10.0
+margin_top = 5.0
+margin_right = 250.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 240, 24 )
+size_flags_vertical = 6
+custom_styles/panel = SubResource( 35 )
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/EndGame/WordList/WLbl/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0.235294, 0.223529, 0.356863, 1 )
+custom_fonts/font = SubResource( 36 )
+text = "POSSIBLE WORD COMBOS"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/EndGame/WordList"]
+margin_top = 33.0
+margin_right = 270.0
+margin_bottom = 53.0
+
+[node name="AmountPane" type="Panel" parent="CanvasLayer/Control/EndGame/WordList/MarginContainer"]
+margin_left = 85.0
+margin_right = 185.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 100, 20 )
+size_flags_horizontal = 6
+custom_styles/panel = SubResource( 24 )
+
+[node name="PosWords" type="Label" parent="CanvasLayer/Control/EndGame/WordList/MarginContainer/AmountPane"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0.235294, 0.223529, 0.356863, 1 )
+custom_fonts/font = SubResource( 28 )
+text = "300 words"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WordGridCont" type="MarginContainer" parent="CanvasLayer/Control/EndGame/WordList"]
+margin_left = 73.0
+margin_top = 57.0
+margin_right = 197.0
+margin_bottom = 440.0
+size_flags_horizontal = 6
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control/EndGame/WordList/WordGridCont"]
+margin_right = 124.0
+margin_bottom = 383.0
+theme = SubResource( 40 )
+scroll_horizontal_enabled = false
+
+[node name="WordGrid" type="GridContainer" parent="CanvasLayer/Control/EndGame/WordList/WordGridCont/ScrollContainer"]
+margin_top = 41.0
+margin_right = 124.0
+margin_bottom = 341.0
+rect_min_size = Vector2( 124, 300 )
+size_flags_horizontal = 6
+size_flags_vertical = 6
+columns = 2
+
+[node name="Return" type="MarginContainer" parent="CanvasLayer/Control/EndGame/WordList"]
+margin_top = 444.0
+margin_right = 270.0
+margin_bottom = 480.0
+size_flags_vertical = 8
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="ToScore" type="TextureButton" parent="CanvasLayer/Control/EndGame/WordList/Return"]
+margin_left = 82.0
+margin_top = 5.0
+margin_right = 188.0
+margin_bottom = 31.0
+size_flags_horizontal = 6
+texture_normal = ExtResource( 23 )
+texture_hover = ExtResource( 24 )
+stretch_mode = 3
+
+[node name="Tutorial" type="MarginContainer" parent="CanvasLayer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Tutorial"]
+margin_right = 270.0
+margin_bottom = 480.0
+color = Color( 0, 0, 0, 0.968627 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Tutorial"]
+margin_left = 10.0
+margin_top = 131.0
+margin_right = 260.0
+margin_bottom = 348.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Tutorial/MarginContainer"]
+margin_right = 250.0
+margin_bottom = 217.0
+custom_styles/panel = SubResource( 22 )
+
+[node name="TBoxContainer" type="VBoxContainer" parent="CanvasLayer/Tutorial/MarginContainer"]
+margin_right = 250.0
+margin_bottom = 217.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+alignment = 1
+
+[node name="Title" type="MarginContainer" parent="CanvasLayer/Tutorial/MarginContainer/TBoxContainer"]
+margin_right = 250.0
+margin_bottom = 35.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 10
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Tutorial/MarginContainer/TBoxContainer/Title"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 245.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 3
+size_flags_vertical = 6
+custom_styles/panel = SubResource( 20 )
+
+[node name="TtleLabel" type="Label" parent="CanvasLayer/Tutorial/MarginContainer/TBoxContainer/Title/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0.235294, 0.223529, 0.356863, 1 )
+custom_fonts/font = SubResource( 21 )
+text = "ANAGRAMS"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WordCont" type="MarginContainer" parent="CanvasLayer/Tutorial/MarginContainer/TBoxContainer"]
+margin_top = 39.0
+margin_right = 250.0
+margin_bottom = 171.0
+rect_min_size = Vector2( 250, 0 )
+custom_constants/margin_right = 5
+custom_constants/margin_top = 10
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="CanvasLayer/Tutorial/MarginContainer/TBoxContainer/WordCont"]
+margin_left = 5.0
+margin_top = 10.0
+margin_right = 245.0
+margin_bottom = 122.0
+size_flags_vertical = 6
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 23 )
+text = "Combine the given letters to form as many words as possible before the time runs out!"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartCont" type="MarginContainer" parent="CanvasLayer/Tutorial/MarginContainer/TBoxContainer"]
+margin_top = 175.0
+margin_right = 250.0
+margin_bottom = 217.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="StartBtn" type="TextureButton" parent="CanvasLayer/Tutorial/MarginContainer/TBoxContainer/StartCont"]
+margin_left = 88.0
+margin_top = 10.0
+margin_right = 162.0
+margin_bottom = 32.0
+size_flags_horizontal = 6
+button_mask = 3
+texture_normal = ExtResource( 13 )
+texture_hover = ExtResource( 9 )
+stretch_mode = 3
+
+[node name="Cursor" type="Sprite" parent="CanvasLayer"]
+position = Vector2( 82, 218 )
+z_index = 300
+texture = ExtResource( 25 )
+centered = false
+
+[node name="TileTween" type="Tween" parent="."]
+
+[node name="ReturnTween" type="Tween" parent="."]
+
+[node name="ErrorProducer" parent="." instance=ExtResource( 17 )]
+visible = false
+position = Vector2( 140, 316 )
+
+[node name="RoundTimer" type="Timer" parent="."]
+wait_time = 90.0
+one_shot = true
+
+[node name="ControlTween" type="Tween" parent="."]
+
+[node name="ScoreTween" type="Tween" parent="."]
+
+[connection signal="pressed" from="CanvasLayer/Control/Game/MajorContainer/Functionality/HBoxContainer/ExitCont/Panel/Undo" to="." method="_on_Undo_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/HBoxContainer/ShuffleContainer/Panel/ShuffleButton" to="." method="_on_ShuffleButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/Game/MajorContainer/ButtonSet/VBoxContainer/HBoxContainer/EnterButton" to="." method="_on_EnterButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/EndGame/EndGameCont/Holder/ViewWordList" to="." method="_on_ViewWordList_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/EndGame/EndGameCont/Holder/MarginContainer/Replay/ReplayButton" to="." method="_on_ReplayButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/EndGame/EndGameCont/Holder/MarginContainer/Replay/MenuButton" to="." method="_on_MenuButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/EndGame/WordList/Return/ToScore" to="." method="_on_ToScore_pressed"]
+[connection signal="pressed" from="CanvasLayer/Tutorial/MarginContainer/TBoxContainer/StartCont/StartBtn" to="." method="_on_StartBtn_pressed"]
+[connection signal="timeout" from="RoundTimer" to="." method="_on_RoundTimer_timeout"]

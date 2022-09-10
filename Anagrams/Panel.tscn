@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Anagrams/EmptyPanel.gd" type="Script" id=1]
+[ext_resource path="res://Icons/empty_panel.png" type="Texture" id=2]
+
+[sub_resource type="StyleBoxTexture" id=1]
+texture = ExtResource( 2 )
+region_rect = Rect2( 0, 0, 35, 35 )
+
+[node name="EmptyPanel" type="Panel"]
+rect_min_size = Vector2( 35, 35 )
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

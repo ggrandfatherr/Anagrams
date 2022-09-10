@@ -1,0 +1,38 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Anagrams/EmptyButton.gd" type="Script" id=1]
+[ext_resource path="res://fonts_tff/nokiafc22.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Icons/tile_bg.png" type="Texture" id=3]
+[ext_resource path="res://Icons/tile_bg_hv.png" type="Texture" id=4]
+[ext_resource path="res://Icons/tile_bg_pres.png" type="Texture" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxTexture" id=5]
+texture = ExtResource( 4 )
+region_rect = Rect2( 0, 0, 37, 37 )
+
+[sub_resource type="StyleBoxTexture" id=6]
+texture = ExtResource( 5 )
+region_rect = Rect2( 0, 0, 37, 37 )
+
+[sub_resource type="StyleBoxTexture" id=4]
+texture = ExtResource( 3 )
+region_rect = Rect2( 0, 0, 37, 37 )
+
+[node name="Button" type="Button"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+focus_mode = 0
+custom_colors/font_color = Color( 0.235294, 0.223529, 0.356863, 1 )
+custom_fonts/font = SubResource( 1 )
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/normal = SubResource( 4 )
+enabled_focus_mode = 0
+text = "A"
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
